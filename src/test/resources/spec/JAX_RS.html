@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <style>
+        code {
+            color: crimson;
+            padding: 2px;
+            font-size: 105%;
+        }
+    </style>
+    <title>JAX-RS</title>
+</head>
+<body>
+<p>A JAX-RS application consists of:<br />
+    <strong>Application subclass:</strong> An optional Application subclass that defines the other classes that make up the application<br />
+    <strong>Root resource classes</strong>: One or more root resource classes that define entry points into the URI space used by the application<br />
+    <strong>Providers</strong>: Zero or more providers that supply extended functionality to the JAX-RS runtime.</p>
+
+<p><br />
+    1. <strong>@Application</strong><br />
+    The ApplicationPath annotation specifies the base URI path segment to which all root resource class URIs are relative. By default, all root resource classes and providers packaged with the Application subclass are included in the application.</p>
+
+<pre>
+<code>@ApplicationPath("acme")
+public class AcmeApplication extends Application {
+}</code></pre>
+
+<p>2. <strong>ROOT RESOURCE CLASSES：@Path</strong></p>
+
+<p>Root resource classes provide entry points into the URI space used by the application. Root resource classes are plain old Java objects (POJOs) that are annotated with&nbsp;<code>@Path</code>. Here is an example root resource class:</p>
+
+<pre>
+<code>@Path("widgets")
+public class WidgetsResource {
+@GET
+public WidgetsRepresentation getWidgetList() {
+...
+}
+}</code></pre>
+
+<p>In the above, the root resource class is published at the relative URI&nbsp;<code>widgets</code>. If this class were part of the&nbsp;<code>AcmeApplication</code>&nbsp;shown earlier, then its URI path would be&nbsp;<code>/acme/widgets</code>.</p>
+
+<p>To expose a single widget as a resource, you can add a sub-resource method to the resource class as follows:</p>
+
+<p>In the above, HTTP GET requests for&nbsp;<code>/acme/widgets/{id}</code>&nbsp;will be dispatched to the&nbsp;<code>getWidget</code>&nbsp;method. The&nbsp;<code>{id}</code>&nbsp;indicates that the path is a URI template that will match any URI with the prefix&nbsp;<code>/acme/widgets/</code>&nbsp;and a single following path segment, e.g.,&nbsp;<code>/acme/widgets/foo</code>.</p>
+
+<p>3. <strong>@GET/@POST/@PUT/@DELETE</strong></p>
+
+<p>In preceding exmaple, the&nbsp;<code>@GET</code>&nbsp;annotation on the&nbsp;<code>getWidgetList</code>&nbsp;method indicates that the method is a resource method that you want to be called when an HTTP GET request is dispatched for that URI. Additional annotations are provided to support the other common HTTP methods. The set is extensible for other less common methods. The value returned from the method is converted into a response body by an entity provider. Returning a non-void Java type results in a 200 OK response, while a void method results in a 204 No Content response. As you will see shortly, the status returned in a response can be customized.</p>
+
+<p>4.&nbsp;<strong>Extracting Request Parameters</strong></p>
+
+<p><strong>Query parameters</strong>&nbsp;</p>
+
+<p>Query parameters&nbsp;are extracted from the request URI query parameters and are specified by using the&nbsp;javax.ws.rs.QueryParam&nbsp;annotation in the method parameter arguments. The following example, from the&nbsp;sparklines&nbsp;sample application, demonstrates using&nbsp;@QueryParam&nbsp;to extract query parameters from the&nbsp;Query&nbsp;component of the request URL:</p>
+
+<pre>
+<code>@Path("smooth")
+@GET
+public Response smooth(
+        @DefaultValue("2") @QueryParam("step") int step,
+        @DefaultValue("true") @QueryParam("min-m") boolean hasMin,
+        @DefaultValue("true") @QueryParam("max-m") boolean hasMax,
+        @DefaultValue("true") @QueryParam("last-m") boolean hasLast,
+        @DefaultValue("blue") @QueryParam("min-color") ColorParam minColor,
+        @DefaultValue("green") @QueryParam("max-color") ColorParam maxColor,
+        @DefaultValue("red") @QueryParam("last-color") ColorParam lastColor
+        ) { ... }</code></pre>
+
+<p><strong>URI path parameters</strong>&nbsp;</p>
+
+<p>URI path parameters&nbsp;are extracted from the request URI, and the parameter names correspond to the URI path template variable names specified in the&nbsp;@Path&nbsp;class-level annotation. URI parameters are specified using the&nbsp;javax.ws.rs.PathParam&nbsp;annotation in the method parameter arguments. The following example shows how to use&nbsp;@Path&nbsp;variables and the&nbsp;@PathParam&nbsp;annotation in a method:</p>
+
+<pre>
+<code>@Path("/{username}")
+public class MyResourceBean {
+    ...
+    @GET
+    public String printUsername(@PathParam("username") String userId) {
+        ...
+    }
+}</code></pre>
+
+<p>Both&nbsp;@QueryParam&nbsp;and&nbsp;@PathParam&nbsp;can be used only on the following Java types:</p>
+
+<ul>
+    <li>
+        <p>All primitive types except&nbsp;char</p>
+    </li>
+    <li>
+        <p>All wrapper classes of primitive types except&nbsp;Character</p>
+    </li>
+    <li>
+        <p>Any class with a constructor that accepts a single&nbsp;String&nbsp;argument</p>
+    </li>
+    <li>
+        <p>Any class with the static method named&nbsp;valueOf(String)&nbsp;that accepts a single&nbsp;String&nbsp;argument</p>
+    </li>
+    <li>
+        <p>List&lt;T&gt;,&nbsp;Set&lt;T&gt;, or&nbsp;SortedSet&lt;T&gt;, where&nbsp;<em>T</em>&nbsp;matches the already listed criteria. Sometimes, parameters may contain more than one value for the same name. If this is the case, these types may be used to obtain all values</p>
+    </li>
+</ul>
+
+<p>If&nbsp;@DefaultValue&nbsp;is not used in conjunction with&nbsp;@QueryParam, and the query parameter is not present in the request, the value will be an empty collection for&nbsp;List,&nbsp;Set, or&nbsp;SortedSet; null for other object types; and the default for primitive types.</p>
+
+<p>5.&nbsp;<strong>Using&nbsp;@Consumes&nbsp;and&nbsp;@Produces&nbsp;to Customize Requests and Responses</strong></p>
+
+<h4><strong>The&nbsp;@Produces&nbsp;Annotation</strong></h4>
+
+<p>The&nbsp;@Produces&nbsp;annotation is used to specify the MIME media types or representations a resource can produce and send back to the client. If&nbsp;@Produces&nbsp;is applied at the class level, all the methods in a resource can produce the specified MIME types by default. If applied at the method level, the annotation overrides any&nbsp;@Produces&nbsp;annotations applied at the class level.</p>
+
+<p>If no methods in a resource are able to produce the MIME type in a client request, the JAX-RS runtime sends back an HTTP &ldquo;406 Not Acceptable&rdquo; error.</p>
+
+<p>The value of&nbsp;@Produces&nbsp;is an array of&nbsp;String&nbsp;of MIME types. For example:</p>
+
+<pre>
+@Produces({&quot;image/jpeg,image/png&quot;})</pre>
+
+<p>The following example shows how to apply&nbsp;@Produces&nbsp;at both the class and method levels:</p>
+
+<pre>
+<code>@Path("/myResource")
+@Produces("text/plain")
+public class SomeResource {
+    @GET
+    public String doGetAsPlainText() {
+        ...
+    }
+
+    @GET
+    @Produces("text/html")
+    public String doGetAsHtml() {
+        ...
+    }
+}</code></pre>
+
+<p>The&nbsp;doGetAsPlainText&nbsp;method defaults to the MIME media type of the&nbsp;@Produces&nbsp;annotation at the class level. The&nbsp;doGetAsHtml&nbsp;method&rsquo;s&nbsp;@Produces&nbsp;annotation overrides the class-level&nbsp;@Produces&nbsp;setting and specifies that the method can produce HTML rather than plain text.</p>
+
+<p>If a resource class is capable of producing more than one MIME media type, the resource method chosen will correspond to the most acceptable media type as declared by the client. More specifically, the&nbsp;Accept&nbsp;header of the HTTP request declares what is most acceptable. For example, if the&nbsp;Accept&nbsp;header is&nbsp;Accept: text/plain, the&nbsp;doGetAsPlainText&nbsp;method will be invoked. Alternatively, if the&nbsp;Accept&nbsp;header is&nbsp;Accept: text/plain;q=0.9, text/html, which declares that the client can accept media types of&nbsp;text/plain&nbsp;and&nbsp;text/html&nbsp;but prefers the latter, the&nbsp;doGetAsHtml&nbsp;method will be invoked.</p>
+
+<h4><strong>The&nbsp;@Consumes&nbsp;Annotation</strong></h4>
+
+<p>The&nbsp;@Consumes&nbsp;annotation is used to specify which MIME media types of representations a resource can accept, or consume, from the client. If&nbsp;@Consumes&nbsp;is applied at the class level, all the response methods accept the specified MIME types by default. If applied at the method level,&nbsp;@Consumes&nbsp;overrides any&nbsp;@Consumes&nbsp;annotations applied at the class level.</p>
+
+<p>If a resource is unable to consume the MIME type of a client request, the JAX-RS runtime sends back an HTTP 415 (&ldquo;Unsupported Media Type&rdquo;) error.</p>
+
+<p>The value of&nbsp;@Consumes&nbsp;is an array of&nbsp;String&nbsp;of acceptable MIME types. For example:</p>
+
+<pre>
+@Consumes({&quot;text/plain,text/html&quot;})</pre>
+
+<p>The following example shows how to apply&nbsp;@Consumes&nbsp;at both the class and method levels:</p>
+
+<pre>
+<code>@Path("/myResource")
+@Consumes("multipart/related")
+public class SomeResource {
+    @POST
+    public String doPost(MimeMultipart mimeMultipartData) {
+        ...
+    }
+
+    @POST
+    @Consumes("application/x-www-form-urlencoded")
+    public String doPost2(FormURLEncodedProperties formData) {
+        ...
+    }
+}</code></pre>
+
+<p>The&nbsp;doPost&nbsp;method defaults to the MIME media type of the&nbsp;@Consumes&nbsp;annotation at the class level. The&nbsp;doPost2&nbsp;method overrides the class level&nbsp;@Consumes&nbsp;annotation to specify that it can accept URL-encoded form data.</p>
+
+<p>If no resource methods can respond to the requested MIME type, an HTTP 415 (&ldquo;Unsupported Media Type&rdquo;) error is returned to the client.</p>
+
+<p>6.&nbsp;<strong>PROVIDERS: FUNCTIONALITY FOR THE JAVA-RS RUNTIME</strong></p>
+
+<p>Providers are JAX-RS extensions that supply functionality to the JAX-RS runtime. The two main provider types are entity providers and exception mapping providers.</p>
+
+<p><strong>Entity Providers</strong></p>
+
+<p>Entity providers supply serialization and/or deserialization services between resource representations and their associated Java types. An entity provider that supports deserialization of a representation to a Java type implements the&nbsp;<code>MessageBodyReader</code>&nbsp;interface. An entity provider that supports serialization of a Java type to a representation implements the&nbsp;<code>MessageBodyWriter</code>&nbsp;interface.</p>
+
+<p>Inclusion of an entity provider for a particular Java type in a JAX-RS application allows that type to be used as a resource method argument, as the return type for a resource method, or as the type of entity embedded in a returned&nbsp;<code>Response</code>.&nbsp;Entity providers may use the&nbsp;<code>@Consumes</code>&nbsp;and&nbsp;<code>@Provides</code>&nbsp;annotations to statically declare the media types that they support. They can also determine whether they support a particular media type and Java type at runtime to accommodate more complex providers.</p>
+
+<p><strong>Exception Mapping Providers</strong></p>
+
+<p>Exception mapping providers supply mapping services between Java exceptions and a JAX-RS Response. Exception mapping providers implement the&nbsp;<code>ExceptionMapper</code>&nbsp;interface and are called when a resource method throws a checked or runtime exception. The Response returned by an exception mapping provider is treated the same as a Response returned by a resource method: it may use any status code and may contain headers. Any contained entity will be serialized using an appropriate entity provider.</p>
+
+</body>
+</html>

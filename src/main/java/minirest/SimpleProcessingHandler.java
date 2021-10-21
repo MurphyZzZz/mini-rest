@@ -1,3 +1,5 @@
+package minirest;
+
 import io.netty.buffer.ByteBuf;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.SimpleChannelInboundHandler;
@@ -29,6 +31,8 @@ public class SimpleProcessingHandler extends SimpleChannelInboundHandler<FullHtt
         System.out.println("URI: " + msg.uri());
         System.out.println("Headers: " + msg.headers());
         System.out.println("Trailing headers: " + msg.trailingHeaders());
+
+
 
         if (msg.method() == HttpMethod.POST) {
             ByteBuf data = msg.content();

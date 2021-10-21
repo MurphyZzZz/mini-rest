@@ -2,8 +2,10 @@ plugins {
     id 'java'
 }
 
-group 'com.thoughtworks'
-version '1.0-SNAPSHOT'
+group = 'com.thoughtworks'
+version = '1.0-SNAPSHOT'
+sourceCompatibility = '11'
+
 
 repositories {
     mavenCentral()
@@ -11,6 +13,8 @@ repositories {
 
 dependencies {
     implementation 'io.netty:netty-all:4.1.24.Final'
+    implementation group: 'javax.inject', name: 'javax.inject', version: '1'
+    implementation group: 'org.reflections', name: 'reflections', version: '0.9.11'
 
     implementation group: 'com.fasterxml.jackson.core', name: 'jackson-databind', version: '2.13.0'
 
@@ -20,6 +24,8 @@ dependencies {
 
     implementation 'org.projectlombok:lombok:1.18.20'
     annotationProcessor 'org.projectlombok:lombok:1.18.20'
+
+    implementation files("$projectDir/lib/mini-spring-framework-1.0-SNAPSHOT.jar")
 }
 
 test {

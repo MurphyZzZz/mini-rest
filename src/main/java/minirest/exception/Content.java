@@ -1,4 +1,4 @@
-package minirest;
+package minirest.exception;
 
 import java.lang.reflect.InvocationTargetException;
 

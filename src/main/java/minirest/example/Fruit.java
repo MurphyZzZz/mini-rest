@@ -1,5 +1,6 @@
-package minirest;
+package minirest.example;
 
+import minirest.Content;
 import minirest.annotations.GET;
 import minirest.annotations.Path;
 

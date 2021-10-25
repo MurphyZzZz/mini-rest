@@ -1,12 +1,22 @@
 package minirest.example;
 
+import container.MiniDi;
 import minirest.Content;
 import minirest.annotations.GET;
 import minirest.annotations.Path;
 
+import javax.inject.Inject;
+
 
 @Path("/fruit")
+@MiniDi
 public class Fruit implements Content {
+    Apple apple;
+
+    @Inject
+    public Fruit(Apple apple) {
+        this.apple = apple;
+    }
 
     @GET
     @Path("/quantity")
@@ -16,7 +26,6 @@ public class Fruit implements Content {
 
     @Path("/apple")
     public Apple getApple() {
-        return new Apple();
+        return this.apple;
     }
-
 }

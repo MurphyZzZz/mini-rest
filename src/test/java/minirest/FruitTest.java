@@ -1,5 +1,6 @@
 package minirest;
 
+import minirest.example.Apple;
 import minirest.example.Fruit;
 import org.junit.jupiter.api.Test;
 
@@ -10,7 +11,8 @@ class FruitTest {
     void should_directly_return_content_when_result_is_not_sub_resource_given_url_and_method() {
         String methodName = "GET";
         String uri = "/quantity";
-        Fruit fruit = new Fruit();
+        Apple apple = new Apple();
+        Fruit fruit = new Fruit(apple);
 
         String result = fruit.getContent(methodName, uri);
 
@@ -21,7 +23,8 @@ class FruitTest {
     void should_return_subresource_class_when_result_is_subresource_given_method_name_and_url() {
         String methodName = "GET";
         String uri = "/apple/name";
-        Fruit fruit = new Fruit();
+        Apple apple = new Apple();
+        Fruit fruit = new Fruit(apple);
 
         String result = fruit.getContent(methodName, uri);
 

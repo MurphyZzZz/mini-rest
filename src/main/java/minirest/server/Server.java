@@ -1,4 +1,4 @@
-package minirest;
+package minirest.server;
 
 import io.netty.bootstrap.ServerBootstrap;
 import io.netty.channel.ChannelFuture;

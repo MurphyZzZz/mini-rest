@@ -30,4 +30,16 @@ class FruitTest {
 
         assertEquals("Apple", result);
     }
+
+    @Test
+    void should_pass_value_to_variable_given_a_path_param_value() {
+        String methodName = "GET";
+        String uri = "/type/1";
+        Apple apple = new Apple();
+        Fruit fruit = new Fruit(apple);
+
+        String result = fruit.getContent(methodName, uri);
+
+        assertEquals("Pear", result);
+    }
 }

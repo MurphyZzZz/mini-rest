@@ -1,4 +1,4 @@
-package minirest.server;
+package minirest;
 
 import container.Container;
 import io.netty.buffer.ByteBuf;

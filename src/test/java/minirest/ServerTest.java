@@ -6,7 +6,6 @@ import io.netty.handler.codec.http.FullHttpRequest;
 import io.netty.handler.codec.http.FullHttpResponse;
 import io.netty.handler.codec.http.HttpMethod;
 import io.netty.handler.codec.http.HttpVersion;
-import minirest.server.SimpleProcessingHandler;
 import org.junit.jupiter.api.Test;
 
 import java.nio.charset.Charset;

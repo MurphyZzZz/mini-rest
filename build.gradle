@@ -17,6 +17,7 @@ dependencies {
     implementation group: 'org.reflections', name: 'reflections', version: '0.9.11'
 
     implementation group: 'com.fasterxml.jackson.core', name: 'jackson-databind', version: '2.13.0'
+    implementation 'org.springframework.boot:spring-boot-starter-web:2.5.5'
 
     testImplementation 'org.junit.jupiter:junit-jupiter-api:5.7.0'
     testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine:5.7.0'

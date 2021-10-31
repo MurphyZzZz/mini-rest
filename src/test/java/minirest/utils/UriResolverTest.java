@@ -1,6 +1,6 @@
 package minirest.utils;
 
-import minirest.resolver.UriResolver;
+import minirest.handler.UriHandler;
 import org.junit.jupiter.api.Test;
 
 import java.util.Map;
@@ -14,7 +14,7 @@ class UriResolverTest {
         String url = "/Apple";
         String template = url;
 
-        String result = UriResolver.getMatchedUri(url, template);
+        String result = UriHandler.getMatchedUri(url, template);
 
         assertEquals("/Apple", result);
     }
@@ -24,7 +24,7 @@ class UriResolverTest {
         String url = "/fruit/1/apple";
         String template = "/fruit/{number}";
 
-        String result = UriResolver.getMatchedUri(url, template);
+        String result = UriHandler.getMatchedUri(url, template);
 
         assertEquals("/fruit/1", result);
     }
@@ -34,7 +34,7 @@ class UriResolverTest {
         String url = "/fruit/1?name=apple";
         String template = "/fruit/{number}";
 
-        String result = UriResolver.getMatchedUri(url, template);
+        String result = UriHandler.getMatchedUri(url, template);
 
         assertEquals("/fruit/1?name=apple", result);
     }
@@ -44,7 +44,7 @@ class UriResolverTest {
         String url = "/fruit/apple?color=red";
         String template = "/fruit/{name}";
 
-        Map<String, String> result = UriResolver.getPathVariable(url, template);
+        Map<String, String> result = UriHandler.getPathVariable(url, template);
 
         assertEquals("apple?color=red", result.get("name"));
     }

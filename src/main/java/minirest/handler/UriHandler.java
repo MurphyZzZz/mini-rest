@@ -1,10 +1,10 @@
-package minirest.resolver;
+package minirest.handler;
 
 import org.springframework.web.util.UriTemplate;
 
 import java.util.Map;
 
-public class UriResolver {
+public class UriHandler {
 
     public static String getMatchedUri(String uri, String templateUri) {
         int templateIndex = templateUri.indexOf("/");
@@ -35,5 +35,13 @@ public class UriResolver {
     public static boolean isUriMatchTemplate(String uri, String templateUri) {
         UriTemplate template = new UriTemplate(templateUri);
         return template.matches(uri);
+    }
+
+    public static String findNextSubString(String uri) {
+        if (uri.indexOf("/", 1) == -1) {
+            return uri;
+        } else {
+            return uri.substring(0, uri.indexOf("/", 1));
+        }
     }
 }

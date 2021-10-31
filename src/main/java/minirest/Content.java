@@ -7,16 +7,20 @@ import minirest.annotations.POST;
 import minirest.annotations.PUT;
 import minirest.annotations.Path;
 import minirest.exception.GetContentException;
+import minirest.exception.RequestMethodHandlerException;
 
+import java.lang.annotation.Annotation;
+import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
+import java.util.List;
 import java.util.Map;
 
-import static minirest.resolver.UriResolver.getMatchedUri;
-import static minirest.resolver.UriResolver.getPathVariable;
-import static minirest.resolver.UriResolver.isUriMatchTemplate;
+import static minirest.handler.UriHandler.getMatchedUri;
+import static minirest.handler.UriHandler.getPathVariable;
+import static minirest.handler.UriHandler.isUriMatchTemplate;
 
 public interface Content {
-    default String getContent(String methodName, String uri){
+    default String getContent(String methodNameInRequest, String uri){
         try {
             val declaredMethods = this.getClass().getDeclaredMethods();
             for (Method method: declaredMethods) {
@@ -28,17 +32,15 @@ public interface Content {
                 if (separateUri == null || !isUriMatchTemplate(separateUri, templateUri)) {
                     continue;
                 }
+
                 Map<String, String> pathParam = getPathVariable(separateUri, templateUri);
-                if (method.isAnnotationPresent(GET.class) && methodName.equals("GET")) {
-                    return (String) method.invoke(this, (Object[]) Iterables.toArray(pathParam.values(), String.class));
-                } else if (method.isAnnotationPresent(POST.class) && methodName.equals("POST")) {
-                    return (String) method.invoke(this, (Object[]) Iterables.toArray(pathParam.values(), String.class));
-                } else if (method.isAnnotationPresent(PUT.class) && methodName.equals("PUT")) {
-                    return (String) method.invoke(this, (Object[]) Iterables.toArray(pathParam.values(), String.class));
+                Object[] args = Iterables.toArray(pathParam.values(), String.class);
+
+                String content = requestMethodHandler(method, methodNameInRequest, args);
+                if (content != null) {
+                    return content;
                 } else {
-                    val subResource = (Content) method.invoke(this, (Object[]) Iterables.toArray(pathParam.values(), String.class));
-                    val newUri = uri.replace(separateUri, "");
-                    return subResource.getContent(methodName, newUri);
+                    return subResourceHandler(methodNameInRequest, uri, method, separateUri, args);
                 }
             }
         } catch (Exception e) {
@@ -46,5 +48,27 @@ public interface Content {
             throw new GetContentException("Some thing went wrong when getting content.");
         }
         return "nothing found";
+    }
+
+    private String subResourceHandler(String methodNameInRequest, String uri, Method method, String separateUri, Object[] args) throws IllegalAccessException, InvocationTargetException {
+        val subResource = (Content) method.invoke(this, args);
+        val newUri = uri.replace(separateUri, "");
+        return subResource.getContent(methodNameInRequest, newUri);
+    }
+
+    private String requestMethodHandler(Method method, String methodNameInRequest, Object[] args)  {
+        List<Class<? extends Annotation>> requestMethodClz = List.of(
+                GET.class, POST.class, PUT.class
+        );
+        try {
+            for (Class<? extends Annotation> clz: requestMethodClz) {
+                if (method.isAnnotationPresent(clz) && methodNameInRequest.equals(clz.getSimpleName())) {
+                    return (String) method.invoke(this, args);
+                }
+            }
+        } catch (InvocationTargetException | IllegalAccessException exception) {
+            throw new RequestMethodHandlerException();
+        }
+        return null;
     }
 }

@@ -12,14 +12,12 @@ import io.netty.handler.codec.http.HttpHeaderValues;
 import io.netty.handler.codec.http.HttpMethod;
 import io.netty.handler.codec.http.HttpResponseStatus;
 import io.netty.handler.codec.http.HttpVersion;
-import lombok.val;
-import minirest.Content;
-import minirest.annotations.Path;
 import minirest.exception.GetContentException;
-import minirest.exception.ResourceException;
 
 import java.nio.charset.StandardCharsets;
-import java.util.Collection;
+
+import static minirest.handler.ContentHandler.getContent;
+import static minirest.handler.UriHandler.findNextSubString;
 
 public class SimpleProcessingHandler extends SimpleChannelInboundHandler<FullHttpRequest> {
 
@@ -46,8 +44,7 @@ public class SimpleProcessingHandler extends SimpleChannelInboundHandler<FullHtt
         System.out.println("Trailing headers: " + msg.trailingHeaders());
 
         String uri = msg.uri();
-        String separateUri = findNextSubString(uri);
-        String responseContent = getContent(msg, uri, separateUri);
+        String responseContent = getContent(container, msg, uri, findNextSubString(uri));
 
         if (msg.method() == HttpMethod.POST) {
             ByteBuf data = msg.content();
@@ -72,31 +69,6 @@ public class SimpleProcessingHandler extends SimpleChannelInboundHandler<FullHtt
         response.headers().set(HttpHeaderNames.CONNECTION, HttpHeaderValues.KEEP_ALIVE);
         ctx.write(response);
     }
-
-    private String getContent(FullHttpRequest msg, String uri, String separateUri) {
-        Collection<Class<?>> classes = container.getAllBeans();
-        for (Class<?> clz : classes) {
-            if (clz.isAnnotationPresent(Path.class) && clz.getAnnotation(Path.class).value().equals(separateUri)) {
-                if (container.getBean(clz) instanceof Content) {
-                    final Content content = ((Content) container.getBean(clz));
-                    val newUri = uri.replace(separateUri, "");
-                    return content.getContent(msg.method().name(), newUri);
-                } else {
-                    throw new ResourceException();
-                }
-            }
-        }
-        throw new ResourceException();
-    }
-
-    private String findNextSubString(String uri) {
-        if (uri.indexOf("/", 1) == -1) {
-            return uri;
-        } else {
-            return uri.substring(0, uri.indexOf("/", 1));
-        }
-    }
-
     /*
     channel读取完成之后需要输出缓冲流。如果没有这一步，会发现客户端会一直在刷新。
     */

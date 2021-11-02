@@ -40,6 +40,26 @@ class UriHandlerTest {
     }
 
     @Test
+    void should_return_url_contain_query_string_value_given_a_single_url_contain_a_query_string() {
+        String url = "/name?nickName=1";
+        String template = "/name";
+
+        Boolean result = UriHandler.isUriMatchTemplate(url, template);
+
+        assertEquals(true, result);
+    }
+
+    @Test
+    void should_return_url_contain_path_param_value_given_a_single_url_contain_a_path_param() {
+        String url = "/type/1";
+        String template = "/type/{typeId}";
+
+        Boolean result = UriHandler.isUriMatchTemplate(url, template);
+
+        assertEquals(true, result);
+    }
+
+    @Test
     void should_return_a_map_of_query_param_given_a_complete_url() {
         String url = "http://localhost:8080/fruit/apple?color=red&size=big";
 

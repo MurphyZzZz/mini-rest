@@ -25,4 +25,28 @@ class ServerTest {
         String httpResponseContent = httpResponse.content().toString(Charset.defaultCharset());
         assertEquals("This is a book.", httpResponseContent);
     }
+
+    @Test
+    void should_return_correct_content_given_path_annotation_and_query_string() {
+        EmbeddedChannel channel = new EmbeddedChannel(new SimpleProcessingHandler());
+        FullHttpRequest httpRequest = new DefaultFullHttpRequest(
+                HttpVersion.HTTP_1_1, HttpMethod.GET, "/fruit/name?nickName=1");
+
+        channel.writeInbound(httpRequest);
+        FullHttpResponse httpResponse = channel.readOutbound();
+        String httpResponseContent = httpResponse.content().toString(Charset.defaultCharset());
+        assertEquals("nickName", httpResponseContent);
+    }
+
+    @Test
+    void should_return_correct_content_given_path_annotation_and_path_param() {
+        EmbeddedChannel channel = new EmbeddedChannel(new SimpleProcessingHandler());
+        FullHttpRequest httpRequest = new DefaultFullHttpRequest(
+                HttpVersion.HTTP_1_1, HttpMethod.GET, "/fruit/type/1");
+
+        channel.writeInbound(httpRequest);
+        FullHttpResponse httpResponse = channel.readOutbound();
+        String httpResponseContent = httpResponse.content().toString(Charset.defaultCharset());
+        assertEquals("This is type 1 - Pear.", httpResponseContent);
+    }
 }

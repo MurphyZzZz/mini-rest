@@ -32,8 +32,9 @@ public class UriHandler {
     }
 
     public static boolean isUriMatchTemplate(String uri, String templateUri) {
-        UriTemplate template = new UriTemplate(templateUri);
-        return template.matches(uri);
+        uri = findNextSubString(uri);
+        templateUri = findNextSubString(templateUri);
+        return uri.contains(templateUri);
     }
 
     public static String findNextSubString(String uri) {

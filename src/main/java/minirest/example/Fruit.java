@@ -34,7 +34,7 @@ public class Fruit implements Content {
     @GET
     @Path("/type/{typeId}")
     public String getType(@PathParam("typeId") String typeId) {
-        if (typeId.equals("1")) return "Pear";
+        if (typeId.equals("1")) return "This is type 1 - Pear.";
         else if (typeId.equals("2")) return "Apple";
         else return "no matching fruit with id " + typeId;
     }
@@ -42,7 +42,7 @@ public class Fruit implements Content {
     @GET
     @Path("/name")
     public String getFruitName(@RequestParam("nickName") String nickName) {
-        if (nickName.equals("1")) return "nickName";
+        if (nickName.equals("1")) return "My nickName is wonderful fruit!";
         else return "no return.";
     }
 

@@ -24,6 +24,6 @@ public class ContentHandler {
                 }
             }
         }
-        throw new ResourceException();
+        return null;
     }
 }

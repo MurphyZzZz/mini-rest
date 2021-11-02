@@ -44,7 +44,7 @@ class UriHandlerTest {
         String url = "/name?nickName=1";
         String template = "/name";
 
-        Boolean result = UriHandler.isUriMatchTemplate(url, template);
+        Boolean result = UriHandler.isSubstringMatched(url, template);
 
         assertEquals(true, result);
     }
@@ -54,7 +54,7 @@ class UriHandlerTest {
         String url = "/type/1";
         String template = "/type/{typeId}";
 
-        Boolean result = UriHandler.isUriMatchTemplate(url, template);
+        Boolean result = UriHandler.isSubstringMatched(url, template);
 
         assertEquals(true, result);
     }

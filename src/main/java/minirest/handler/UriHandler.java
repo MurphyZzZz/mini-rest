@@ -1,7 +1,5 @@
 package minirest.handler;
 
-import org.springframework.web.util.UriTemplate;
-
 import java.net.URLDecoder;
 import java.nio.charset.StandardCharsets;
 import java.util.Collections;
@@ -31,7 +29,7 @@ public class UriHandler {
         }
     }
 
-    public static boolean isUriMatchTemplate(String uri, String templateUri) {
+    public static boolean isSubstringMatched(String uri, String templateUri) {
         uri = findNextSubString(uri);
         templateUri = findNextSubString(templateUri);
         return uri.contains(templateUri);

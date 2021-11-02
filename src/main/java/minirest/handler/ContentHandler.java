@@ -3,7 +3,6 @@ package minirest.handler;
 import container.Container;
 import io.netty.handler.codec.http.FullHttpRequest;
 import lombok.val;
-import minirest.Content;
 import minirest.annotations.Path;
 import minirest.exception.ResourceException;
 

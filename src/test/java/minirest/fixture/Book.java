@@ -1,6 +1,6 @@
 package minirest.fixture;
 
-import minirest.Content;
+import minirest.handler.Content;
 import minirest.annotations.GET;
 import minirest.annotations.Path;
 import container.MiniDi;

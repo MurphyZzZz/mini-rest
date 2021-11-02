@@ -1,4 +1,4 @@
-package minirest;
+package minirest.handler;
 
 import lombok.val;
 import minirest.annotations.GET;

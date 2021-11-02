@@ -35,7 +35,7 @@ class ServerTest {
         channel.writeInbound(httpRequest);
         FullHttpResponse httpResponse = channel.readOutbound();
         String httpResponseContent = httpResponse.content().toString(Charset.defaultCharset());
-        assertEquals("nickName", httpResponseContent);
+        assertEquals("My nickName is wonderful fruit!", httpResponseContent);
     }
 
     @Test

@@ -1,7 +1,7 @@
 package minirest.example;
 
 import container.MiniDi;
-import minirest.Content;
+import minirest.handler.Content;
 import minirest.annotations.GET;
 import minirest.annotations.Path;
 import minirest.annotations.PathParam;

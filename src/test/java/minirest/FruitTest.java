@@ -40,6 +40,6 @@ class FruitTest {
 
         String result = fruit.getContent(methodName, uri);
 
-        assertEquals("Pear", result);
+        assertEquals("This is type 1 - Pear.", result);
     }
 }

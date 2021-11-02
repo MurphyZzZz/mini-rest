@@ -1,6 +1,5 @@
 package minirest;
 
-import com.google.common.collect.Iterables;
 import lombok.val;
 import minirest.annotations.GET;
 import minirest.annotations.POST;
@@ -13,10 +12,9 @@ import java.lang.annotation.Annotation;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.List;
-import java.util.Map;
 
+import static minirest.handler.ParameterHandler.getRequestParameters;
 import static minirest.handler.UriHandler.getMatchedUri;
-import static minirest.handler.UriHandler.getPathVariable;
 import static minirest.handler.UriHandler.isUriMatchTemplate;
 
 public interface Content {
@@ -33,8 +31,7 @@ public interface Content {
                     continue;
                 }
 
-                Map<String, String> pathParam = getPathVariable(separateUri, templateUri);
-                Object[] args = Iterables.toArray(pathParam.values(), String.class);
+                Object[] args = getRequestParameters(method, separateUri);
 
                 String content = requestMethodHandler(method, methodNameInRequest, args);
                 if (content != null) {

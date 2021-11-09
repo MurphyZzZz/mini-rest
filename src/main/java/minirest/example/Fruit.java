@@ -1,10 +1,12 @@
 package minirest.example;
 
 import container.MiniDi;
-import minirest.handler.Content;
 import minirest.annotations.GET;
+import minirest.annotations.POST;
 import minirest.annotations.Path;
 import minirest.annotations.PathParam;
+import minirest.annotations.RequestBody;
+import minirest.handler.Content;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import javax.inject.Inject;
@@ -29,6 +31,12 @@ public class Fruit implements Content {
     @Path("/apple")
     public Apple getApple() {
         return this.apple;
+    }
+
+    @POST
+    @Path("/peach")
+    public String setPeach(@RequestBody Peach peach) {
+        return "peach name: " + peach.name + ", " + "peach color: " + peach.color;
     }
 
     @GET

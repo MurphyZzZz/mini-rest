@@ -17,7 +17,7 @@ class ParameterHandlerTest {
         String separateUrl = "/type/1";
         Method method = fruit.getClass().getMethod("getType", String.class);
 
-        Object[] result = getRequestParameters(method, separateUrl);
+        Object[] result = getRequestParameters(method, separateUrl, null);
 
         assertEquals("1", result[0]);
     }
@@ -27,7 +27,7 @@ class ParameterHandlerTest {
         String separateUrl = "/name?nickName=fruitName";
         Method method = fruit.getClass().getMethod("getFruitName", String.class);
 
-        Object[] result = getRequestParameters(method, separateUrl);
+        Object[] result = getRequestParameters(method, separateUrl, null);
 
         assertEquals("fruitName", result[0]);
     }
@@ -37,7 +37,7 @@ class ParameterHandlerTest {
         String separateUrl = "/level?level=1";
         Method method = fruit.getClass().getMethod("getLevel", int.class);
 
-        Object[] result = getRequestParameters(method, separateUrl);
+        Object[] result = getRequestParameters(method, separateUrl, null);
 
         assertEquals(1, result[0]);
     }

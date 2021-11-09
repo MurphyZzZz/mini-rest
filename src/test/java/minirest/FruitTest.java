@@ -1,7 +1,10 @@
 package minirest;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import minirest.example.Apple;
 import minirest.example.Fruit;
+import minirest.example.Peach;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -14,7 +17,7 @@ class FruitTest {
         Apple apple = new Apple();
         Fruit fruit = new Fruit(apple);
 
-        String result = fruit.getContent(methodName, uri);
+        String result = fruit.getContent(methodName, uri, null);
 
         assertEquals(fruit.getQuantity(), result);
     }
@@ -26,7 +29,7 @@ class FruitTest {
         Apple apple = new Apple();
         Fruit fruit = new Fruit(apple);
 
-        String result = fruit.getContent(methodName, uri);
+        String result = fruit.getContent(methodName, uri, null);
 
         assertEquals("Apple", result);
     }
@@ -38,8 +41,24 @@ class FruitTest {
         Apple apple = new Apple();
         Fruit fruit = new Fruit(apple);
 
-        String result = fruit.getContent(methodName, uri);
+        String result = fruit.getContent(methodName, uri, null);
 
         assertEquals("This is type 1 - Pear.", result);
+    }
+
+    @Test
+    void should_process_request_body_given_a_request_body() throws JsonProcessingException {
+        String methodName = "POST";
+        String uri = "/peach";
+        Apple apple = new Apple();
+        Fruit fruit = new Fruit(apple);
+        Peach peach = new Peach("peach", "red");
+        ObjectMapper objectMapper = new ObjectMapper();
+        String requestBody = objectMapper.writeValueAsString(peach);
+
+        String result = fruit.getContent(methodName, uri, requestBody);
+
+        String expect = "peach name: " + peach.getName() + ", " + "peach color: " + peach.getColor();
+        assertEquals(expect, result);
     }
 }

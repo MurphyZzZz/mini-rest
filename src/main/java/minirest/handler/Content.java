@@ -18,7 +18,7 @@ import static minirest.handler.UriHandler.getMatchedUri;
 import static minirest.handler.UriHandler.isSubstringMatched;
 
 public interface Content {
-    default String getContent(String methodNameInRequest, String uri){
+    default String getContent(String methodNameInRequest, String uri, String requestBody){
         try {
             val methods = this.getClass().getMethods();
             for (Method method: methods) {
@@ -26,9 +26,9 @@ public interface Content {
 
                 String templateUri = method.getAnnotation(Path.class).value();
                 String separateUri = getMatchedUri(uri, templateUri);
-                Object[] args = getRequestParameters(method, separateUri);
+                Object[] args = getRequestParameters(method, separateUri, requestBody);
 
-                return getStringContent(methodNameInRequest, uri, method, separateUri, args);
+                return getStringContent(methodNameInRequest, uri, method, separateUri, args, requestBody);
             }
         } catch (Exception e) {
             e.printStackTrace();
@@ -37,12 +37,12 @@ public interface Content {
         return "nothing found";
     }
 
-    private String getStringContent(String methodNameInRequest, String uri, Method method, String separateUri, Object[] args) throws IllegalAccessException, InvocationTargetException {
-        String content = requestMethodHandler(method, methodNameInRequest, args);
+    private String getStringContent(String methodNameInRequest, String uri, Method method, String separateUri, Object[] args, String requestBody) throws IllegalAccessException, InvocationTargetException {
+        String content = requestMethodHandler(method, methodNameInRequest, args, requestBody);
         if (content != null) {
             return content;
         } else {
-            return subResourceHandler(methodNameInRequest, uri, method, separateUri, args);
+            return subResourceHandler(methodNameInRequest, uri, method, separateUri, args, requestBody);
         }
     }
 
@@ -65,13 +65,13 @@ public interface Content {
         return method.isAnnotationPresent(Path.class);
     }
 
-    private String subResourceHandler(String methodNameInRequest, String uri, Method method, String separateUri, Object[] args) throws IllegalAccessException, InvocationTargetException {
+    private String subResourceHandler(String methodNameInRequest, String uri, Method method, String separateUri, Object[] args, String requestBody) throws IllegalAccessException, InvocationTargetException {
         val subResource = (Content) method.invoke(this, args);
         val newUri = uri.replace(separateUri, "");
-        return subResource.getContent(methodNameInRequest, newUri);
+        return subResource.getContent(methodNameInRequest, newUri, requestBody);
     }
 
-    private String requestMethodHandler(Method method, String methodNameInRequest, Object[] args)  {
+    private String requestMethodHandler(Method method, String methodNameInRequest, Object[] args, String requestBody)  {
         List<Class<? extends Annotation>> requestMethodClz = List.of(
                 GET.class, POST.class, PUT.class
         );

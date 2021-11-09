@@ -1,6 +1,8 @@
 package minirest.handler;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import minirest.annotations.Path;
+import minirest.annotations.RequestBody;
 import org.springframework.web.util.UriTemplate;
 
 import java.lang.reflect.Method;
@@ -13,14 +15,26 @@ import static minirest.handler.UriHandler.getQueryParams;
 
 
 public class ParameterHandler {
-    public static Object[] getRequestParameters(Method method, String separateUri) {
+
+    static ObjectMapper objectMapper = new ObjectMapper();
+    public static Object[] getRequestParameters(Method method, String separateUri, String requestBody) {
         String templateUri = method.getAnnotation(Path.class).value();
         Map<String, String> params = getPathVariable(separateUri, templateUri);
         params.putAll(getQueryParams(separateUri));
         Parameter[] parameters = method.getParameters();
         List<Object> arguments = new ArrayList<>();
-        for (Parameter param: parameters) {
-            Object value = castValue(param, params.get(param.getName()));
+        for (Parameter methodPara: parameters) {
+            if (methodPara.isAnnotationPresent(RequestBody.class)) {
+                try {
+                    Object value = objectMapper.readValue(requestBody, methodPara.getType());
+                    arguments.add(value);
+                    continue;
+                } catch (Exception e) {
+                    // TODO: 2021/11/9 exception
+                }
+            }
+            if (params.get(methodPara.getName()) == null) continue;
+            Object value = castValue(methodPara, params.get(methodPara.getName()));
             arguments.add(value);
         }
         return arguments.toArray();

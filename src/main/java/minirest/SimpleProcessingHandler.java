@@ -43,8 +43,11 @@ public class SimpleProcessingHandler extends SimpleChannelInboundHandler<FullHtt
         System.out.println("Headers: " + msg.headers());
         System.out.println("Trailing headers: " + msg.trailingHeaders());
 
+        String requestBody = msg.content().toString(StandardCharsets.UTF_8);
+        System.out.println("Request body: " + requestBody);
+
         String uri = msg.uri();
-        String responseContent = getContent(container, msg, uri, findNextSubString(uri));
+        String responseContent = getContent(container, msg, findNextSubString(uri));
 
         if (msg.method() == HttpMethod.POST) {
             ByteBuf data = msg.content();

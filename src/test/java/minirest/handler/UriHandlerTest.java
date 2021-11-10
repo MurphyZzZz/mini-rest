@@ -87,13 +87,4 @@ class UriHandlerTest {
 
         assertEquals(0, result.size());
     }
-
-    @Test
-    void should_1_return_a_map_of_query_param_given_a_incomplete_url() {
-        String url = "/name?nickName=fruitName";;
-
-        Map<String, String> result = getQueryParams(url);
-
-        assertEquals("fruitName", result.get("nickName"));
-    }
 }

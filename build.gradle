@@ -17,6 +17,7 @@ repositories {
 
 dependencies {
     implementation 'io.netty:netty-all:4.1.24.Final'
+    implementation 'javax.ws.rs:javax.ws.rs-api:2.1.1'
     implementation group: 'javax.inject', name: 'javax.inject', version: '1'
     implementation group: 'org.reflections', name: 'reflections', version: '0.9.11'
 

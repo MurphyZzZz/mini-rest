@@ -1,5 +1,6 @@
 package minirest.server;
 
+import container.MiniDi;
 import io.netty.bootstrap.ServerBootstrap;
 import io.netty.channel.ChannelFuture;
 import io.netty.channel.ChannelInitializer;
@@ -11,9 +12,19 @@ import io.netty.channel.socket.nio.NioServerSocketChannel;
 import io.netty.handler.codec.http.HttpObjectAggregator;
 import io.netty.handler.codec.http.HttpRequestDecoder;
 import io.netty.handler.codec.http.HttpResponseEncoder;
-import minirest.SimpleProcessingHandler;
+import minirest.handler.SimpleProcessingHandler;
 
+import javax.inject.Inject;
+
+@MiniDi
 public class Server {
+
+    SimpleProcessingHandler simpleProcessingHandler;
+
+    @Inject
+    public Server(SimpleProcessingHandler simpleProcessingHandler) {
+        this.simpleProcessingHandler = simpleProcessingHandler;
+    }
 
     public void run() throws Exception {
         EventLoopGroup bossGroup = new NioEventLoopGroup();
@@ -29,7 +40,7 @@ public class Server {
                                     .addLast("decoder", new HttpRequestDecoder())   // 1
                                     .addLast("encoder", new HttpResponseEncoder())  // 2
                                     .addLast("aggregator", new HttpObjectAggregator(512 * 1024))    // 3
-                                    .addLast(new SimpleProcessingHandler());
+                                    .addLast(simpleProcessingHandler);
                         }
                     }).option(ChannelOption.SO_BACKLOG, 128)
                     .childOption(ChannelOption.SO_KEEPALIVE, true);

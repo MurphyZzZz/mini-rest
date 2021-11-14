@@ -1,7 +1,9 @@
-package minirest;
+package minirest.handler;
 
 import container.Container;
+import container.MiniDi;
 import io.netty.buffer.ByteBuf;
+import io.netty.channel.ChannelHandler;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.SimpleChannelInboundHandler;
 import io.netty.handler.codec.http.DefaultFullHttpResponse;
@@ -14,17 +16,21 @@ import io.netty.handler.codec.http.HttpResponseStatus;
 import io.netty.handler.codec.http.HttpVersion;
 import minirest.exception.GetContentException;
 
+import javax.inject.Inject;
 import java.nio.charset.StandardCharsets;
 
 import static minirest.handler.ContentHandler.getContent;
 import static minirest.handler.UriHandler.findNextSubString;
 
+@MiniDi
+@ChannelHandler.Sharable
 public class SimpleProcessingHandler extends SimpleChannelInboundHandler<FullHttpRequest> {
 
-    Container container = new Container(this.getClass().getPackageName());
+    Container container;
 
-    public SimpleProcessingHandler() {
-        container.lunch();
+    @Inject
+    public SimpleProcessingHandler(Container container) {
+        this.container = container;
     }
 
     @Override

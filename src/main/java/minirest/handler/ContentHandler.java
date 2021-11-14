@@ -17,8 +17,8 @@ public class ContentHandler {
         Collection<Class<?>> classes = container.getAllBeans();
         for (Class<?> clz : classes) {
             if (clz.isAnnotationPresent(Path.class) && clz.getAnnotation(Path.class).value().equals(separateUri)) {
-                if (container.getBean(clz) instanceof Content) {
-                    final Content content = ((Content) container.getBean(clz));
+                if (container.getBeanInstance(clz) instanceof Content) {
+                    final Content content = ((Content) container.getBeanInstance(clz));
                     val newUri = uri.replace(separateUri, "");
                     return content.getContent(msg.method().name(), newUri, requestBody);
                 } else {

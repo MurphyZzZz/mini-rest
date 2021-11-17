@@ -19,18 +19,15 @@ import minirest.exception.GetContentException;
 import javax.inject.Inject;
 import java.nio.charset.StandardCharsets;
 
-import static minirest.handler.ContentHandler.getContent;
-import static minirest.handler.UriHandler.findNextSubString;
-
 @MiniDi
 @ChannelHandler.Sharable
 public class SimpleProcessingHandler extends SimpleChannelInboundHandler<FullHttpRequest> {
 
-    Container container;
+    ContentHandler contentHandler;
 
     @Inject
-    public SimpleProcessingHandler(Container container) {
-        this.container = container;
+    public SimpleProcessingHandler(ContentHandler contentHandler) {
+        this.contentHandler = contentHandler;
     }
 
     @Override
@@ -52,8 +49,7 @@ public class SimpleProcessingHandler extends SimpleChannelInboundHandler<FullHtt
         String requestBody = msg.content().toString(StandardCharsets.UTF_8);
         System.out.println("Request body: " + requestBody);
 
-        String uri = msg.uri();
-        String responseContent = getContent(container, msg, findNextSubString(uri));
+        String responseContent = contentHandler.getContent(msg);
 
         if (msg.method() == HttpMethod.POST) {
             ByteBuf data = msg.content();
@@ -78,6 +74,7 @@ public class SimpleProcessingHandler extends SimpleChannelInboundHandler<FullHtt
         response.headers().set(HttpHeaderNames.CONNECTION, HttpHeaderValues.KEEP_ALIVE);
         ctx.write(response);
     }
+
     /*
     channel读取完成之后需要输出缓冲流。如果没有这一步，会发现客户端会一直在刷新。
     */

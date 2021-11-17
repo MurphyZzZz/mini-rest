@@ -38,7 +38,7 @@ public interface Content {
     }
 
     private String getStringContent(String methodNameInRequest, String uri, Method method, String separateUri, Object[] args, String requestBody) throws IllegalAccessException, InvocationTargetException {
-        String content = requestMethodHandler(method, methodNameInRequest, args, requestBody);
+        String content = requestMethodHandler(method, methodNameInRequest, args);
         if (content != null) {
             return content;
         } else {
@@ -71,7 +71,7 @@ public interface Content {
         return subResource.getContent(methodNameInRequest, newUri, requestBody);
     }
 
-    private String requestMethodHandler(Method method, String methodNameInRequest, Object[] args, String requestBody)  {
+    private String requestMethodHandler(Method method, String methodNameInRequest, Object[] args)  {
         List<Class<? extends Annotation>> requestMethodClz = List.of(
                 GET.class, POST.class, PUT.class
         );

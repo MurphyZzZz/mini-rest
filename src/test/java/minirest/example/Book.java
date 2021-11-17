@@ -1,4 +1,4 @@
-package minirest.fixture;
+package minirest.example;
 
 import minirest.handler.Content;
 import minirest.annotations.GET;

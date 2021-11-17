@@ -31,9 +31,16 @@ dependencies {
     implementation 'org.projectlombok:lombok:1.18.20'
     annotationProcessor 'org.projectlombok:lombok:1.18.20'
 
+    testImplementation 'org.projectlombok:lombok:1.18.20'
+    testAnnotationProcessor 'org.projectlombok:lombok:1.18.20'
+
     implementation files("$projectDir/lib/mini-spring-framework-1.0-SNAPSHOT.jar")
 }
 
 test {
     useJUnitPlatform()
+}
+
+compileTestJava {
+    options.compilerArgs << '-parameters'
 }

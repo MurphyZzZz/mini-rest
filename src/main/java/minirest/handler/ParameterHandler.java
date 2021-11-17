@@ -3,6 +3,7 @@ package minirest.handler;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import minirest.annotations.Path;
 import minirest.annotations.RequestBody;
+import minirest.exception.DeserializeContentException;
 import org.springframework.web.util.UriTemplate;
 
 import java.lang.reflect.Method;
@@ -30,7 +31,7 @@ public class ParameterHandler {
                     arguments.add(value);
                     continue;
                 } catch (Exception e) {
-                    // TODO: 2021/11/9 exception
+                    throw new DeserializeContentException(requestBody);
                 }
             }
             if (params.get(methodPara.getName()) == null) continue;

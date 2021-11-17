@@ -1,18 +1,31 @@
 package minirest.handler;
 
 import container.Container;
+import container.MiniDi;
 import io.netty.handler.codec.http.FullHttpRequest;
 import lombok.val;
 import minirest.annotations.Path;
 import minirest.exception.ResourceException;
 
+import javax.inject.Inject;
 import java.nio.charset.StandardCharsets;
 import java.util.Collection;
 
+import static minirest.handler.UriHandler.findNextSubString;
+
+@MiniDi
 public class ContentHandler {
 
-    public static String getContent(Container container, FullHttpRequest msg, String separateUri) {
+    Container container;
+
+    @Inject
+    public ContentHandler(Container container) {
+        this.container = container;
+    }
+
+    public String getContent(FullHttpRequest msg) {
         String uri = msg.uri();
+        String separateUri = findNextSubString(uri);
         String requestBody = msg.content().toString(StandardCharsets.UTF_8);
         Collection<Class<?>> classes = container.getAllBeans();
         for (Class<?> clz : classes) {

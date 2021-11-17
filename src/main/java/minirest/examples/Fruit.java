@@ -1,4 +1,4 @@
-package minirest.example;
+package minirest.examples;
 
 import container.MiniDi;
 import minirest.annotations.GET;

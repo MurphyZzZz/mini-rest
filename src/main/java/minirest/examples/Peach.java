@@ -1,4 +1,4 @@
-package minirest.example;
+package minirest.examples;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;

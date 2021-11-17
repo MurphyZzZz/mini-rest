@@ -18,6 +18,11 @@ import static minirest.handler.UriHandler.getMatchedUri;
 import static minirest.handler.UriHandler.isSubstringMatched;
 
 public interface Content {
+
+    List<Class<? extends Annotation>> requestMethodClz = List.of(
+            GET.class, POST.class, PUT.class
+    );
+
     default String getContent(String methodNameInRequest, String uri, String requestBody){
         try {
             val methods = this.getClass().getMethods();
@@ -38,12 +43,10 @@ public interface Content {
     }
 
     private String getStringContent(String methodNameInRequest, String uri, Method method, String separateUri, Object[] args, String requestBody) throws IllegalAccessException, InvocationTargetException {
-        String content = requestMethodHandler(method, methodNameInRequest, args);
-        if (content != null) {
-            return content;
-        } else {
-            return subResourceHandler(methodNameInRequest, uri, method, separateUri, args, requestBody);
+        if (requestMethodClz.stream().anyMatch(method::isAnnotationPresent)) {
+            return requestMethodHandler(method, methodNameInRequest, args);
         }
+        return subResourceHandler(methodNameInRequest, uri, method, separateUri, args, requestBody);
     }
 
     private boolean isMatchedHandlingMethod(String uri, Method method) {
@@ -72,18 +75,15 @@ public interface Content {
     }
 
     private String requestMethodHandler(Method method, String methodNameInRequest, Object[] args)  {
-        List<Class<? extends Annotation>> requestMethodClz = List.of(
-                GET.class, POST.class, PUT.class
-        );
         try {
             for (Class<? extends Annotation> clz: requestMethodClz) {
-                if (method.isAnnotationPresent(clz) && methodNameInRequest.equals(clz.getSimpleName())) {
+                if (methodNameInRequest.equals(clz.getSimpleName())) {
                     return (String) method.invoke(this, args);
                 }
             }
         } catch (InvocationTargetException | IllegalAccessException exception) {
             throw new RequestMethodHandlerException();
         }
-        return null;
+        throw new GetContentException("No content found.");
     }
 }

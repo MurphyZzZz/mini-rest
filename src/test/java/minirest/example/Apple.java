@@ -8,7 +8,7 @@ import minirest.handler.Content;
 
 @Path("/apple")
 @MiniDi
-public class Apple implements Content {
+public class Apple {
 
     @GET
     @Path("/name")

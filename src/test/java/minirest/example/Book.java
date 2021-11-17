@@ -7,7 +7,7 @@ import container.MiniDi;
 
 @MiniDi
 @Path("/book")
-public class Book implements Content {
+public class Book {
 
     @GET
     @Path("/content")

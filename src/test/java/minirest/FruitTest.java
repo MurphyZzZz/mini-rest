@@ -5,6 +5,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import minirest.example.Apple;
 import minirest.example.Fruit;
 import minirest.example.Peach;
+import minirest.handler.Resource;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -16,8 +17,9 @@ class FruitTest {
         String uri = "/quantity";
         Apple apple = new Apple();
         Fruit fruit = new Fruit(apple);
+        Resource resource = new Resource(fruit, Fruit.class);
 
-        String result = fruit.getContent(methodName, uri, null);
+        String result = resource.getContent(methodName, uri, null);
 
         assertEquals(fruit.getQuantity(), result);
     }
@@ -28,8 +30,9 @@ class FruitTest {
         String uri = "/apple/name";
         Apple apple = new Apple();
         Fruit fruit = new Fruit(apple);
+        Resource resource = new Resource(fruit, Fruit.class);
 
-        String result = fruit.getContent(methodName, uri, null);
+        String result = resource.getContent(methodName, uri, null);
 
         assertEquals("Apple", result);
     }
@@ -40,8 +43,9 @@ class FruitTest {
         String uri = "/type/1";
         Apple apple = new Apple();
         Fruit fruit = new Fruit(apple);
+        Resource resource = new Resource(fruit, Fruit.class);
 
-        String result = fruit.getContent(methodName, uri, null);
+        String result = resource.getContent(methodName, uri, null);
 
         assertEquals("This is type 1 - Pear.", result);
     }
@@ -55,8 +59,9 @@ class FruitTest {
         Peach peach = new Peach("peach", "red");
         ObjectMapper objectMapper = new ObjectMapper();
         String requestBody = objectMapper.writeValueAsString(peach);
+        Resource resource = new Resource(fruit, Fruit.class);
 
-        String result = fruit.getContent(methodName, uri, requestBody);
+        String result = resource.getContent(methodName, uri, requestBody);
 
         String expect = "peach name: " + peach.getName() + ", " + "peach color: " + peach.getColor();
         assertEquals(expect, result);

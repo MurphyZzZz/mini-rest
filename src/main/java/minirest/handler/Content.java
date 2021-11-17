@@ -17,16 +17,21 @@ import static minirest.handler.ParameterHandler.getRequestParameters;
 import static minirest.handler.UriHandler.getMatchedUri;
 import static minirest.handler.UriHandler.isSubstringMatched;
 
-public interface Content {
+public abstract class Content {
+    Object resource;
+    Class<?> resourceClz;
 
-    List<Class<? extends Annotation>> requestMethodClz = List.of(
-            GET.class, POST.class, PUT.class
-    );
+    public Content(Object resource, Class<?> resourceClz) {
+        this.resource = resource;
+        this.resourceClz = resourceClz;
+    }
 
-    default String getContent(String methodNameInRequest, String uri, String requestBody){
+    List<Class<? extends Annotation>> requestMethodClz = List.of(GET.class, POST.class, PUT.class);
+
+    public String getContent(String methodNameInRequest, String uri, String requestBody) {
         try {
-            val methods = this.getClass().getMethods();
-            for (Method method: methods) {
+            val methods = resourceClz.getMethods();
+            for (Method method : methods) {
                 if (!isMatchedHandlingMethod(uri, method)) continue;
 
                 String templateUri = method.getAnnotation(Path.class).value();
@@ -69,16 +74,16 @@ public interface Content {
     }
 
     private String subResourceHandler(String methodNameInRequest, String uri, Method method, String separateUri, Object[] args, String requestBody) throws IllegalAccessException, InvocationTargetException {
-        val subResource = (Content) method.invoke(this, args);
+        val subResource = new Resource(method.invoke(resource, args), method.invoke(resource, args).getClass());
         val newUri = uri.replace(separateUri, "");
         return subResource.getContent(methodNameInRequest, newUri, requestBody);
     }
 
-    private String requestMethodHandler(Method method, String methodNameInRequest, Object[] args)  {
+    private String requestMethodHandler(Method method, String methodNameInRequest, Object[] args) {
         try {
-            for (Class<? extends Annotation> clz: requestMethodClz) {
+            for (Class<? extends Annotation> clz : requestMethodClz) {
                 if (methodNameInRequest.equals(clz.getSimpleName())) {
-                    return (String) method.invoke(this, args);
+                    return (String) method.invoke(resource, args);
                 }
             }
         } catch (InvocationTargetException | IllegalAccessException exception) {

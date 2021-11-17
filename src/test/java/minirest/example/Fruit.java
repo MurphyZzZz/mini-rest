@@ -14,7 +14,7 @@ import javax.inject.Inject;
 
 @Path("/fruit")
 @MiniDi
-public class Fruit implements Content {
+public class Fruit {
     Apple apple;
 
     @Inject

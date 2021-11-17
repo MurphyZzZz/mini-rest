@@ -14,7 +14,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 @Path("/fruit")
 @MiniDi
 @NoArgsConstructor
-public class Fruit implements Content {
+public class Fruit {
 
     @GET
     @Path("/quantity")
@@ -24,7 +24,7 @@ public class Fruit implements Content {
 
     @Path("/apple")
     public Apple getApple() {
-        return new Apple();
+        return new Apple("Apple 2");
     }
 
     @POST

@@ -35,9 +35,7 @@ public class ContentHandler {
         Collection<Class<?>> classes = container.getAllBeans();
         for (Class<?> clz : classes) {
             if (clz.isAnnotationPresent(Path.class) && clz.getAnnotation(Path.class).value().equals(separateUri)) {
-                if (container.getBeanInstance(clz) instanceof Content) {
-                    return ((Content) container.getBeanInstance(clz));
-                }
+                return new Resource(container.getBeanInstance(clz), clz);
             }
         }
         throw new ResourceException("Unable find root resource exception.");

@@ -1,13 +1,10 @@
 package minirest.examples;
 
-import container.MiniDi;
-import minirest.handler.Content;
 import minirest.annotations.GET;
 import minirest.annotations.Path;
+import minirest.handler.Content;
 
 
-@Path("/apple")
-@MiniDi
 public class Apple implements Content {
 
     @GET

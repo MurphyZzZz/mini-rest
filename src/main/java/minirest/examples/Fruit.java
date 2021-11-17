@@ -1,6 +1,7 @@
 package minirest.examples;
 
 import container.MiniDi;
+import lombok.NoArgsConstructor;
 import minirest.annotations.GET;
 import minirest.annotations.POST;
 import minirest.annotations.Path;
@@ -9,28 +10,21 @@ import minirest.annotations.RequestBody;
 import minirest.handler.Content;
 import org.springframework.web.bind.annotation.RequestParam;
 
-import javax.inject.Inject;
-
 
 @Path("/fruit")
 @MiniDi
+@NoArgsConstructor
 public class Fruit implements Content {
-    Apple apple;
-
-    @Inject
-    public Fruit(Apple apple) {
-        this.apple = apple;
-    }
 
     @GET
     @Path("/quantity")
-    public String getQuantity(){
+    public String getQuantity() {
         return "5";
     }
 
     @Path("/apple")
     public Apple getApple() {
-        return this.apple;
+        return new Apple();
     }
 
     @POST

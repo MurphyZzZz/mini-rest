@@ -13,12 +13,12 @@ import java.util.Collection;
 import static minirest.handler.UriHandler.findNextSubString;
 
 @MiniDi
-public class ContentHandler {
+public class RootResourceHandler {
 
     Container container;
 
     @Inject
-    public ContentHandler(Container container) {
+    public RootResourceHandler(Container container) {
         this.container = container;
     }
 

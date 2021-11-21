@@ -7,7 +7,7 @@ import io.netty.handler.codec.http.FullHttpRequest;
 import io.netty.handler.codec.http.FullHttpResponse;
 import io.netty.handler.codec.http.HttpMethod;
 import io.netty.handler.codec.http.HttpVersion;
-import minirest.handler.ContentHandler;
+import minirest.handler.RootResourceHandler;
 import minirest.handler.SimpleProcessingHandler;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -19,7 +19,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 class ServerTest {
 
     Container container = new Container(this.getClass().getPackageName());
-    ContentHandler contentHandler = new ContentHandler(container);
+    RootResourceHandler rootResourceHandler = new RootResourceHandler(container);
 
     @BeforeEach
     void setUp() {
@@ -28,7 +28,7 @@ class ServerTest {
 
     @Test
     void should_dispatch_request_to_resource_class_given_path_annotation() {
-        EmbeddedChannel channel = new EmbeddedChannel(new SimpleProcessingHandler(contentHandler));
+        EmbeddedChannel channel = new EmbeddedChannel(new SimpleProcessingHandler(rootResourceHandler));
         FullHttpRequest httpRequest = new DefaultFullHttpRequest(
                 HttpVersion.HTTP_1_1, HttpMethod.GET, "/book/content");
 
@@ -40,7 +40,7 @@ class ServerTest {
 
     @Test
     void should_return_correct_content_given_path_annotation_and_query_string() {
-        EmbeddedChannel channel = new EmbeddedChannel(new SimpleProcessingHandler(contentHandler));
+        EmbeddedChannel channel = new EmbeddedChannel(new SimpleProcessingHandler(rootResourceHandler));
         FullHttpRequest httpRequest = new DefaultFullHttpRequest(
                 HttpVersion.HTTP_1_1, HttpMethod.GET, "/fruit/name?nickName=1");
 
@@ -52,7 +52,7 @@ class ServerTest {
 
     @Test
     void should_return_correct_content_given_path_annotation_and_path_param() {
-        EmbeddedChannel channel = new EmbeddedChannel(new SimpleProcessingHandler(contentHandler));
+        EmbeddedChannel channel = new EmbeddedChannel(new SimpleProcessingHandler(rootResourceHandler));
         FullHttpRequest httpRequest = new DefaultFullHttpRequest(
                 HttpVersion.HTTP_1_1, HttpMethod.GET, "/fruit/type/1");
 

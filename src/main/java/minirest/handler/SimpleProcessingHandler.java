@@ -1,6 +1,5 @@
 package minirest.handler;
 
-import container.Container;
 import container.MiniDi;
 import io.netty.buffer.ByteBuf;
 import io.netty.channel.ChannelHandler;
@@ -23,11 +22,11 @@ import java.nio.charset.StandardCharsets;
 @ChannelHandler.Sharable
 public class SimpleProcessingHandler extends SimpleChannelInboundHandler<FullHttpRequest> {
 
-    ContentHandler contentHandler;
+    RootResourceHandler rootResourceHandler;
 
     @Inject
-    public SimpleProcessingHandler(ContentHandler contentHandler) {
-        this.contentHandler = contentHandler;
+    public SimpleProcessingHandler(RootResourceHandler rootResourceHandler) {
+        this.rootResourceHandler = rootResourceHandler;
     }
 
     @Override
@@ -49,7 +48,7 @@ public class SimpleProcessingHandler extends SimpleChannelInboundHandler<FullHtt
         String requestBody = msg.content().toString(StandardCharsets.UTF_8);
         System.out.println("Request body: " + requestBody);
 
-        String responseContent = contentHandler.getContent(msg);
+        String responseContent = rootResourceHandler.getContent(msg);
 
         if (msg.method() == HttpMethod.POST) {
             ByteBuf data = msg.content();

@@ -6,7 +6,7 @@ import minirest.annotations.POST;
 import minirest.annotations.Path;
 import minirest.annotations.PathParam;
 import minirest.annotations.RequestBody;
-import org.springframework.web.bind.annotation.RequestParam;
+import minirest.annotations.RequestParam;
 
 
 @Path("/fruit")

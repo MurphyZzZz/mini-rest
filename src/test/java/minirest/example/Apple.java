@@ -1,18 +1,18 @@
 package minirest.example;
 
-import container.MiniDi;
+import lombok.AllArgsConstructor;
 import minirest.annotations.GET;
 import minirest.annotations.Path;
-import minirest.handler.Content;
 
 
-@Path("/apple")
-@MiniDi
+@AllArgsConstructor
 public class Apple {
+
+    String name;
 
     @GET
     @Path("/name")
     public String getFruitName(){
-        return "Apple";
+        return this.name;
     }
 }

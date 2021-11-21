@@ -6,21 +6,12 @@ import minirest.annotations.POST;
 import minirest.annotations.Path;
 import minirest.annotations.PathParam;
 import minirest.annotations.RequestBody;
-import minirest.handler.Content;
 import org.springframework.web.bind.annotation.RequestParam;
-
-import javax.inject.Inject;
 
 
 @Path("/fruit")
 @MiniDi
 public class Fruit {
-    Apple apple;
-
-    @Inject
-    public Fruit(Apple apple) {
-        this.apple = apple;
-    }
 
     @GET
     @Path("/quantity")
@@ -29,8 +20,10 @@ public class Fruit {
     }
 
     @Path("/apple")
-    public Apple getApple() {
-        return this.apple;
+    public Apple getApple(@RequestParam("index") String index) {
+        if (index.equals("1")) return new Apple("Apple 1");
+        if (index.equals("2")) return new Apple("Apple 2");
+        return new Apple("Apple 3");
     }
 
     @POST

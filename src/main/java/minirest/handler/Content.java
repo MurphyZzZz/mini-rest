@@ -44,7 +44,7 @@ public abstract class Content {
             e.printStackTrace();
             throw new GetContentException("Some thing went wrong when getting content.");
         }
-        return "nothing found";
+        return "Nothing found, something may go wrong.";
     }
 
     private String getStringContent(String methodNameInRequest, String uri, Method method, String separateUri, Object[] args, String requestBody) throws IllegalAccessException, InvocationTargetException {
@@ -74,9 +74,18 @@ public abstract class Content {
     }
 
     private String subResourceHandler(String methodNameInRequest, String uri, Method method, String separateUri, Object[] args, String requestBody) throws IllegalAccessException, InvocationTargetException {
-        val subResource = new Resource(method.invoke(resource, args), method.invoke(resource, args).getClass());
-        val newUri = uri.replace(separateUri, "");
+        Resource subResource = new Resource(method.invoke(resource, args), method.invoke(resource, args).getClass());
+        String newUri = getNewUri(uri, separateUri);
         return subResource.getContent(methodNameInRequest, newUri, requestBody);
+    }
+
+    private String getNewUri(String uri, String separateUri) {
+        String subPath;
+        if (separateUri.indexOf("?") > 0)
+            subPath = separateUri.substring(0, separateUri.indexOf("?"));
+        else
+            subPath = separateUri;
+        return uri.replace(subPath, "");
     }
 
     private String requestMethodHandler(Method method, String methodNameInRequest, Object[] args) {

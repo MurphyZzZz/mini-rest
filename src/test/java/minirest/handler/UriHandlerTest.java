@@ -40,6 +40,16 @@ class UriHandlerTest {
     }
 
     @Test
+    void should_return_url_contain_query_string_and_all_request_param_given_a_url() {
+        String url = "/fruit/1/color?name=apple&quantity=2";
+        String template = "/fruit/{number}";
+
+        String result = UriHandler.getMatchedUri(url, template);
+
+        assertEquals("/fruit/1?name=apple&quantity=2", result);
+    }
+
+    @Test
     void should_return_url_contain_query_string_value_given_a_single_url_contain_a_query_string() {
         String url = "/name?nickName=1";
         String template = "/name";

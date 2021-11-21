@@ -10,7 +10,7 @@ import static minirest.handler.ParameterHandler.getRequestParameters;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 class ParameterHandlerTest {
-    Fruit fruit = new Fruit(new Apple());
+    Fruit fruit = new Fruit();
 
     @Test
     void should_return_path_variable_given_a_url_and_function() throws NoSuchMethodException {

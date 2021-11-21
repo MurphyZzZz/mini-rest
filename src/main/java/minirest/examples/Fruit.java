@@ -23,8 +23,10 @@ public class Fruit {
     }
 
     @Path("/apple")
-    public Apple getApple() {
-        return new Apple("Apple 2");
+    public Apple getApple(@RequestParam("index") String index) {
+        if (index.equals("1")) return new Apple("Apple 1");
+        if (index.equals("2")) return new Apple("Apple 2");
+        return new Apple("Apple 3");
     }
 
     @POST

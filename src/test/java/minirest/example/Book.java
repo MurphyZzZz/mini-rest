@@ -1,9 +1,8 @@
 package minirest.example;
 
-import minirest.handler.Content;
+import container.MiniDi;
 import minirest.annotations.GET;
 import minirest.annotations.Path;
-import container.MiniDi;
 
 @MiniDi
 @Path("/book")

@@ -25,8 +25,13 @@ public class UriHandler {
             return null;
         } else {
             if (uriIndex < 0) return uri;
-            return uri.substring(0, uriIndex);
+            return uri.substring(0, uriIndex) + findRequestParam(uri);
         }
+    }
+
+    private static String findRequestParam(String uri) {
+        if (uri.indexOf("?") > 0) return uri.substring(uri.indexOf("?"));
+        else return "";
     }
 
     public static boolean isSubstringMatched(String uri, String templateUri) {

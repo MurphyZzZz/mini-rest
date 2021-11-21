@@ -1,9 +1,8 @@
 package minirest.example;
 
 import container.MiniDi;
-
-import javax.ws.rs.GET;
-import javax.ws.rs.Path;
+import minirest.annotations.GET;
+import minirest.annotations.Path;
 
 @MiniDi
 @Path("/book")

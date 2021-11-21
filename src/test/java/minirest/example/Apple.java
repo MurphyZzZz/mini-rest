@@ -1,9 +1,8 @@
 package minirest.example;
 
 import lombok.AllArgsConstructor;
-
-import javax.ws.rs.GET;
-import javax.ws.rs.Path;
+import minirest.annotations.GET;
+import minirest.annotations.Path;
 
 
 @AllArgsConstructor

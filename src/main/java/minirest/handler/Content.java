@@ -1,13 +1,13 @@
 package minirest.handler;
 
 import lombok.val;
+import minirest.annotations.GET;
+import minirest.annotations.POST;
+import minirest.annotations.PUT;
+import minirest.annotations.Path;
 import minirest.exception.GetContentException;
 import minirest.exception.RequestMethodHandlerException;
 
-import javax.ws.rs.GET;
-import javax.ws.rs.POST;
-import javax.ws.rs.PUT;
-import javax.ws.rs.Path;
 import java.lang.annotation.Annotation;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;

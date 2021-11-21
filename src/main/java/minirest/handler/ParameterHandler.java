@@ -1,11 +1,11 @@
 package minirest.handler;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import minirest.annotations.Path;
-import minirest.annotations.RequestBody;
 import minirest.exception.DeserializeContentException;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.util.UriTemplate;
 
+import javax.ws.rs.Path;
 import java.lang.reflect.Method;
 import java.lang.reflect.Parameter;
 import java.util.ArrayList;

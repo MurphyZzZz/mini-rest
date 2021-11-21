@@ -1,12 +1,13 @@
 package minirest.example;
 
 import container.MiniDi;
-import minirest.annotations.GET;
-import minirest.annotations.POST;
-import minirest.annotations.Path;
-import minirest.annotations.PathParam;
-import minirest.annotations.RequestBody;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
+
+import javax.ws.rs.GET;
+import javax.ws.rs.POST;
+import javax.ws.rs.Path;
+import javax.ws.rs.PathParam;
 
 
 @Path("/fruit")

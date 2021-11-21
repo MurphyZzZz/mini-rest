@@ -1,8 +1,9 @@
 package minirest.examples;
 
 import lombok.AllArgsConstructor;
-import minirest.annotations.GET;
-import minirest.annotations.Path;
+
+import javax.ws.rs.GET;
+import javax.ws.rs.Path;
 
 @AllArgsConstructor
 public class Apple  {

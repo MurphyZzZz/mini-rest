@@ -3,10 +3,10 @@ package minirest.handler;
 import container.Container;
 import container.MiniDi;
 import io.netty.handler.codec.http.FullHttpRequest;
-import minirest.annotations.Path;
 import minirest.exception.ResourceException;
 
 import javax.inject.Inject;
+import javax.ws.rs.Path;
 import java.nio.charset.StandardCharsets;
 import java.util.Collection;
 

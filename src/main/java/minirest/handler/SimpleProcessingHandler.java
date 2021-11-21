@@ -1,6 +1,5 @@
 package minirest.handler;
 
-import container.MiniDi;
 import io.netty.buffer.ByteBuf;
 import io.netty.channel.ChannelHandler;
 import io.netty.channel.ChannelHandlerContext;
@@ -13,6 +12,7 @@ import io.netty.handler.codec.http.HttpHeaderValues;
 import io.netty.handler.codec.http.HttpMethod;
 import io.netty.handler.codec.http.HttpResponseStatus;
 import io.netty.handler.codec.http.HttpVersion;
+import minidi.container.MiniDi;
 import minirest.exception.GetContentException;
 
 import javax.inject.Inject;

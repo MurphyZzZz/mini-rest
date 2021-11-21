@@ -1,6 +1,5 @@
 package minirest.server;
 
-import container.MiniDi;
 import io.netty.bootstrap.ServerBootstrap;
 import io.netty.channel.ChannelFuture;
 import io.netty.channel.ChannelInitializer;
@@ -12,6 +11,7 @@ import io.netty.channel.socket.nio.NioServerSocketChannel;
 import io.netty.handler.codec.http.HttpObjectAggregator;
 import io.netty.handler.codec.http.HttpRequestDecoder;
 import io.netty.handler.codec.http.HttpResponseEncoder;
+import minidi.container.MiniDi;
 import minirest.handler.SimpleProcessingHandler;
 
 import javax.inject.Inject;

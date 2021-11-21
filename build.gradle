@@ -34,7 +34,7 @@ dependencies {
     testImplementation 'org.projectlombok:lombok:1.18.20'
     testAnnotationProcessor 'org.projectlombok:lombok:1.18.20'
 
-    implementation files("$projectDir/lib/mini-spring-framework-1.0-SNAPSHOT.jar")
+    implementation files("$projectDir/lib/mini-di-1.0-SNAPSHOT.jar")
 }
 
 test {

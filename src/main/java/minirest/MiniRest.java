@@ -1,6 +1,6 @@
 package minirest;
 
-import container.ContainerSupplier;
+import minidi.container.ContainerSupplier;
 import minirest.server.Server;
 
 public class MiniRest {

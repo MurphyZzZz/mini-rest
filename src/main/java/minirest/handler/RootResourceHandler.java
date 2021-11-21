@@ -1,8 +1,8 @@
 package minirest.handler;
 
-import container.Container;
-import container.MiniDi;
 import io.netty.handler.codec.http.FullHttpRequest;
+import minidi.container.Container;
+import minidi.container.MiniDi;
 import minirest.annotations.Path;
 import minirest.exception.ResourceException;
 

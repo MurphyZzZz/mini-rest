@@ -1,12 +1,12 @@
 package minirest.example;
 
-import container.Container;
 import io.netty.channel.embedded.EmbeddedChannel;
 import io.netty.handler.codec.http.DefaultFullHttpRequest;
 import io.netty.handler.codec.http.FullHttpRequest;
 import io.netty.handler.codec.http.FullHttpResponse;
 import io.netty.handler.codec.http.HttpMethod;
 import io.netty.handler.codec.http.HttpVersion;
+import minidi.container.Container;
 import minirest.handler.RootResourceHandler;
 import minirest.handler.SimpleProcessingHandler;
 import org.junit.jupiter.api.BeforeEach;

@@ -1,6 +1,6 @@
 package minirest.example;
 
-import container.MiniDi;
+import minidi.container.MiniDi;
 import minirest.annotations.GET;
 import minirest.annotations.POST;
 import minirest.annotations.Path;

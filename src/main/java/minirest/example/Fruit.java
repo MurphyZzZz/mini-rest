@@ -1,13 +1,12 @@
-package minirest.examples;
+package minirest.example;
 
-import container.MiniDi;
 import lombok.NoArgsConstructor;
+import minidi.container.MiniDi;
 import minirest.annotations.GET;
 import minirest.annotations.POST;
 import minirest.annotations.Path;
 import minirest.annotations.PathParam;
 import minirest.annotations.RequestBody;
-import minirest.handler.Content;
 import org.springframework.web.bind.annotation.RequestParam;
 
 
